@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DLL_Debug|Win32">
       <Configuration>DLL_Debug</Configuration>
@@ -29,31 +29,39 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C76996CB-C4CB-4D89-9F67-F605DF129618}</ProjectGuid>
     <RootNamespace>tesseract</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>
+    </CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -111,6 +119,9 @@
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Debug|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'">false</GenerateManifest>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Release|Win32'">$(ProjectName)-opencl</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Release|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Debug|Win32'">
     <CustomBuildStep>
@@ -208,7 +219,7 @@
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\api;..\..\ccmain;..\..\ccutil;..\..\ccstruct;..\..\classify;..\..\cube;..\..\cutil;..\..\dict;..\..\image;..\..\neural_networks\runtime;..\..\textord;..\..\viewer;..\..\wordrec;.;..\..\..\include;..\..\..\include\leptonica;..\port;..\..\opencl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;USE_STD_NAMESPACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -222,7 +233,7 @@
       <PreprocessorDefinitions>MYVERSION=$(LIBTESS_VERSION_R);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;user32.lib;zlib$(ZLIB_VERSION)-static-mtdll.lib;libpng$(LIBPNG_VERSION)-static-mtdll.lib;libjpeg$(LIBJPEG_VERSION)-static-mtdll.lib;giflib$(GIFLIB_VERSION)-static-mtdll.lib;libtiff$(LIBTIFF_VERSION)-static-mtdll.lib;liblept$(LIBLEPT_VERSION)-static-mtdll.lib</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;user32.lib;libboost_zlib-vc140-mt-s-1_61.lib;liblept$(LIBLEPT_VERSION)-static-mt.lib;giflib.lib;libtiff.lib;libpng.lib;jpeg.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>

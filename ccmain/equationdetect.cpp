@@ -248,7 +248,7 @@ BlobSpecialTextType EquationDetect::EstimateTypeForUnichar(
     static GenericVector<UNICHAR_ID> ids_to_exclude;
     if (ids_to_exclude.empty()) {
       static const STRING kCharsToEx[] = {"'", "`", "\"", "\\", ",", ".",
-          "„Äà", "„Äâ", "„Ää", "„Äã", "„Äç", "„Äå", ""};
+          "°“", "°”", "°Œ", "°œ", "°◊", "°÷", ""};
       int i = 0;
       while (kCharsToEx[i] != "") {
         ids_to_exclude.push_back(

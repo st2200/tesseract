@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DLL_Debug|Win32">
       <Configuration>DLL_Debug</Configuration>
@@ -30,31 +30,39 @@
     <ProjectName>libtesseract304</ProjectName>
     <ProjectGuid>{D14F28C7-0CAE-4C37-B174-40FDEFBD4FE0}</ProjectGuid>
     <RootNamespace>libtesseract</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>
+    </CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -111,6 +119,24 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'">$(ProjectName)d</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Debug|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Debug|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Release|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LIB_OpenCL_Release|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Debug|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
+    <IncludePath>D:\my doc\Visual Studio 2015\Projects\ocr\leptonica\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LIB_Debug|Win32'">
     <CustomBuildStep>
@@ -196,7 +222,7 @@ copy "$(TargetPath)" ..\..\..\lib
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>..\..\api;..\..\ccmain;..\..\ccutil;..\..\ccstruct;..\..\classify;..\..\cube;..\..\cutil;..\..\dict;..\..\neural_networks\runtime;..\..\textord;..\..\viewer;..\..\wordrec;.;..\..\..\include;..\..\..\include\leptonica;..\port;..\..\opencl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_LIB;USE_STD_NAMESPACE;WINDLLNAME="$(TargetFileName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -337,6 +363,7 @@ copy "$(TargetDir)$(TargetName).lib" ..\..\..\lib
     <ClCompile Include="..\..\cube\altlist.cpp" />
     <ClCompile Include="..\..\ccutil\ambigs.cpp" />
     <ClCompile Include="..\..\ccmain\applybox.cpp" />
+    <ClCompile Include="..\..\viewer\svutil.cpp" />
     <ClCompile Include="..\..\wordrec\associate.cpp" />
     <ClCompile Include="..\..\api\baseapi.cpp" />
     <ClCompile Include="..\..\api\pdfrenderer.cpp" />
@@ -527,7 +554,6 @@ copy "$(TargetDir)$(TargetName).lib" ..\..\..\lib
     <ClCompile Include="..\..\cutil\structures.cpp" />
     <ClCompile Include="..\..\viewer\svmnode.cpp" />
     <ClCompile Include="..\..\viewer\svpaint.cpp" />
-    <ClCompile Include="..\..\viewer\svutil.cpp" />
     <ClCompile Include="..\..\textord\tabfind.cpp" />
     <ClCompile Include="..\..\textord\tablefind.cpp" />
     <ClCompile Include="..\..\textord\tablerecog.cpp" />
