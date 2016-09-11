@@ -340,7 +340,7 @@ copy "$(TargetDir)$(TargetName).lib" ..\..\..\lib
       <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;user32.lib;liblept$(LIBLEPT_VERSION)d.lib;libtiff$(LIBTIFF_VERSION)-static-mtdll-debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;liblept173.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <Version>$(LIBTESS_NUMBER)</Version>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

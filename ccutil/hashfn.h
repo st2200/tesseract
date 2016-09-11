@@ -22,14 +22,26 @@
 
 #ifdef USE_STD_NAMESPACE
 #if (__cplusplus >= 201103L) || defined(_MSC_VER)  // Visual Studio
+#ifdef _STLPORT_VERSION
+#include <hash_map>
+#include <hash_set>
+#define unordered_map hash_map 
+#define unordered_set hash_set
+#else
 #include <unordered_map>
 #include <unordered_set>
 #define hash_map std::unordered_map
+#endif
 #if (_MSC_VER >= 1500 && _MSC_VER < 1600)  // Visual Studio 2008
 using namespace std::tr1;
 #else  // _MSC_VER
+#ifdef _STLPORT_VERSION
+using std::hash_map;
+using std::hash_set;
+#else
 using std::unordered_map;
 using std::unordered_set;
+#endif
 #include <memory>
 #define SmartPtr std::unique_ptr
 #define HAVE_UNIQUE_PTR
