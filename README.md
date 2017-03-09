@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/tesseract-ocr/tesseract.svg?branch=master)](https://travis-ci.org/tesseract-ocr/tesseract)
-[![Build status](https://ci.appveyor.com/api/projects/status/miah0ikfsf0j3819?svg=true)](https://ci.appveyor.com/project/zdenop/tesseract/)
+[![Build status](https://ci.appveyor.com/api/projects/status/miah0ikfsf0j3819/branch/master?svg=true)](https://ci.appveyor.com/project/zdenop/tesseract/)
 
 For the latest online version of the README.md see:
     
@@ -10,14 +10,15 @@ For the latest online version of the README.md see:
 This package contains an OCR engine - `libtesseract` and a command line program - `tesseract`.
 
 The lead developer is Ray Smith. The maintainer is Zdenko Podobny. 
-For a list of contributors see [AUTHORS](https://github.com/tesseract-ocr/tesseract/blob/master/AUTHORS) and github's log of [contributors](https://github.com/tesseract-ocr/tesseract/graphs/contributors).
+For a list of contributors see [AUTHORS](https://github.com/tesseract-ocr/tesseract/blob/master/AUTHORS)
+and GitHub's log of [contributors](https://github.com/tesseract-ocr/tesseract/graphs/contributors).
 
 Tesseract has unicode (UTF-8) support, and can recognize more than 100
 languages "out of the box". It can be trained to recognize other languages. See [Tesseract Training](https://github.com/tesseract-ocr/tesseract/wiki/TrainingTesseract) for more information. 
 
 Tesseract supports various output formats: plain-text, hocr(html), pdf.
 
-This project does not include a GUI application. If you need one, please see the [3rdParty](https://github.com/tesseract-ocr/tesseract/wiki/3rdParty) wiki page.
+This project does not include a GUI application. If you need one, please see the [3rdParty](https://github.com/tesseract-ocr/tesseract/wiki/User-Projects-%E2%80%93-3rdParty) wiki page.
 
 You should note that in many cases, in order to get better OCR results, you'll need to [improve the quality](https://github.com/tesseract-ocr/tesseract/wiki/ImproveQuality) of the image you are giving Tesseract.
 
@@ -63,7 +64,7 @@ You can either [Install Tesseract via pre-built binary package](https://github.c
 
 Basic command line usage:
 
-    tesseract imagename outputbase [-l lang] [-psm pagesegmode] [configfiles...]
+    tesseract imagename outputbase [-l lang] [--psm pagesegmode] [configfiles...]
 
 For more information about the various command line options use `tesseract --help` or `man tesseract`. 
 

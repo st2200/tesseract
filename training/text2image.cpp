@@ -70,6 +70,9 @@ BOOL_PARAM_FLAG(degrade_image, true,
                 "Degrade rendered image with speckle noise, dilation/erosion "
                 "and rotation");
 
+// Rotate the rendered image to have more realistic glyph borders
+BOOL_PARAM_FLAG(rotate_image, true, "Rotate the image in a random way.");
+
 // Degradation to apply to the image.
 INT_PARAM_FLAG(exposure, 0, "Exposure level in photocopier");
 
@@ -180,7 +183,7 @@ struct SpacingProperties {
 };
 
 static bool IsWhitespaceBox(const BoxChar* boxchar) {
-  return (boxchar->box() == NULL ||
+  return (boxchar->box() == nullptr ||
           SpanUTF8Whitespace(boxchar->ch().c_str()));
 }
 
@@ -220,7 +223,8 @@ void ExtractFontProperties(const string &utf8_text,
   int offset = 0;
   const char* text = utf8_text.c_str();
   while (offset < len) {
-    offset += render->RenderToImage(text + offset, strlen(text + offset), NULL);
+    offset +=
+        render->RenderToImage(text + offset, strlen(text + offset), nullptr);
     const vector<BoxChar*> &boxes = render->GetBoxes();
 
     // If the page break split a bigram, correct the offset so we try the bigram
@@ -248,6 +252,8 @@ void ExtractFontProperties(const string &utf8_text,
       // the input consists of the separated characters.  NOTE(ranjith): As per
       // behdad@ this is not currently controllable at the level of the Pango
       // API.
+      // The most frequent of all is a single character "word" made by the CJK
+      // segmenter.
       // Safeguard against these cases here by just skipping the bigram.
       if (IsWhitespaceBox(boxes[b+1])) {
         continue;
@@ -311,7 +317,7 @@ bool MakeIndividualGlyphs(Pix* pix,
                           const int input_tiff_page) {
   // If checks fail, return false without exiting text2image
   if (!pix) {
-    tprintf("ERROR: MakeIndividualGlyphs(): Input Pix* is NULL\n");
+    tprintf("ERROR: MakeIndividualGlyphs(): Input Pix* is nullptr\n");
     return false;
   } else if (FLAGS_glyph_resized_size <= 0) {
     tprintf("ERROR: --glyph_resized_size must be positive\n");
@@ -354,7 +360,7 @@ bool MakeIndividualGlyphs(Pix* pix,
       continue;
     }
     // Crop the boxed character
-    Pix* pix_glyph = pixClipRectangle(pix, b, NULL);
+    Pix* pix_glyph = pixClipRectangle(pix, b, nullptr);
     if (!pix_glyph) {
       tprintf("ERROR: MakeIndividualGlyphs(): Failed to clip, at i=%d\n", i);
       continue;
@@ -417,7 +423,7 @@ int main(int argc, char** argv) {
   if (FLAGS_list_available_fonts) {
     const vector<string>& all_fonts = FontUtils::ListAvailableFonts();
     for (int i = 0; i < all_fonts.size(); ++i) {
-      tprintf("%3d: %s\n", i, all_fonts[i].c_str());
+      printf("%3d: %s\n", i, all_fonts[i].c_str());
       ASSERT_HOST_MSG(FontUtils::IsAvailableFont(all_fonts[i].c_str()),
                       "Font %s is unrecognized.\n", all_fonts[i].c_str());
     }
@@ -441,8 +447,8 @@ int main(int argc, char** argv) {
   if (!FLAGS_find_fonts && !FontUtils::IsAvailableFont(FLAGS_font.c_str())) {
     string pango_name;
     if (!FontUtils::IsAvailableFont(FLAGS_font.c_str(), &pango_name)) {
-      tprintf("Could not find font named %s.", FLAGS_font.c_str());
-      if (!pango_name.empty()) { 
+      tprintf("Could not find font named %s.\n", FLAGS_font.c_str());
+      if (!pango_name.empty()) {
         tprintf("Pango suggested font %s.\n", pango_name.c_str());
       }
       tprintf("Please correct --font arg.\n");
@@ -496,7 +502,10 @@ int main(int argc, char** argv) {
 
   string src_utf8;
   // This c_str is NOT redundant!
-  File::ReadFileToStringOrDie(FLAGS_text.c_str(), &src_utf8);
+  if (!File::ReadFileToString(FLAGS_text.c_str(), &src_utf8)) {
+    tprintf("Failed to read file: %s\n", FLAGS_text.c_str());
+    exit(1);
+  }
 
   // Remove the unicode mark if present.
   if (strncmp(src_utf8.c_str(), "\xef\xbb\xbf", 3) == 0) {
@@ -517,7 +526,7 @@ int main(int argc, char** argv) {
     if (FLAGS_render_ngrams && !FLAGS_unicharset_file.empty() &&
         !unicharset.load_from_file(FLAGS_unicharset_file.c_str())) {
       tprintf("Failed to load unicharset from file %s\n",
-                 FLAGS_unicharset_file.c_str());
+              FLAGS_unicharset_file.c_str());
       exit(1);
     }
 
@@ -543,7 +552,7 @@ int main(int argc, char** argv) {
       int ngram_len = offsets[i].second;
       // Skip words that contain characters not in found in unicharset.
       if (!FLAGS_unicharset_file.empty() &&
-          !unicharset.encodable_string(curr_pos, NULL)) {
+          !unicharset.encodable_string(curr_pos, nullptr)) {
         continue;
       }
       rand_utf8.append(curr_pos, ngram_len);
@@ -581,7 +590,7 @@ int main(int argc, char** argv) {
     string font_used;
     for (int offset = 0; offset < strlen(to_render_utf8); ++im, ++page_num) {
       tlog(1, "Starting page %d\n", im);
-      Pix* pix = NULL;
+      Pix* pix = nullptr;
       if (FLAGS_find_fonts) {
         offset += render.RenderAllFontsToImage(FLAGS_min_coverage,
                                                to_render_utf8 + offset,
@@ -591,14 +600,15 @@ int main(int argc, char** argv) {
         offset += render.RenderToImage(to_render_utf8 + offset,
                                        strlen(to_render_utf8 + offset), &pix);
       }
-      if (pix != NULL) {
+      if (pix != nullptr) {
         float rotation = 0;
         if (pass == 1) {
           // Pass 2, do mirror rotation.
           rotation = -1 * page_rotation[page_num];
         }
         if (FLAGS_degrade_image) {
-          pix = DegradeImage(pix, FLAGS_exposure, &randomizer, &rotation);
+          pix = DegradeImage(pix, FLAGS_exposure, &randomizer,
+                             FLAGS_rotate_image ? &rotation : nullptr);
         }
         render.RotatePageBoxes(rotation);
 
@@ -651,7 +661,7 @@ int main(int argc, char** argv) {
     string filename = FLAGS_outputbase.c_str();
     filename += ".fontlist.txt";
     FILE* fp = fopen(filename.c_str(), "wb");
-    if (fp == NULL) {
+    if (fp == nullptr) {
       tprintf("Failed to create output font list %s\n", filename.c_str());
     } else {
       for (int i = 0; i < font_names.size(); ++i) {
