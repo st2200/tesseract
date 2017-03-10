@@ -216,18 +216,18 @@ void SVNetwork::Send(const char* msg) {
 
 // Send the whole buffer.
 void SVNetwork::Flush() {
-  mutex_send_->Lock();
+  /*mutex_send_->Lock();
   while (!msg_buffer_out_.empty()) {
     int i = send(stream_, msg_buffer_out_.c_str(), msg_buffer_out_.length(), 0);
     msg_buffer_out_.erase(0, i);
   }
-  mutex_send_->Unlock();
+  mutex_send_->Unlock();*/
 }
 
 // Receive a message from the server.
 // This will always return one line of char* (denoted by \n).
 char* SVNetwork::Receive() {
-  char* result = NULL;
+  /*char* result = NULL;
 #if defined(_WIN32) || defined(__CYGWIN__)
   if (has_content) { result = strtok (NULL, "\n"); }
 #else
@@ -270,13 +270,14 @@ char* SVNetwork::Receive() {
     // Setup a new string tokenizer.
     return strtok_r(msg_buffer_in_, "\n", &buffer_ptr_);
 #endif
-  }
+  }*/
+	return 0;
 }
 
 // Close the connection to the server.
 void SVNetwork::Close() {
 #ifdef _WIN32
-  closesocket(stream_);
+  //closesocket(stream_);
 #else
   close(stream_);
 #endif
@@ -336,7 +337,7 @@ static void FreeAddrInfo(struct addrinfo* addr_info) {
 static int GetAddrInfoNonLinux(const char* hostname, int port,
                                struct addrinfo** addr_info) {
 // Get the host data depending on the OS.
-  struct sockaddr_in* address;
+  /*struct sockaddr_in* address;
   *addr_info = new struct addrinfo;
   memset(*addr_info, 0, sizeof(struct addrinfo));
   address = new struct sockaddr_in;
@@ -366,7 +367,7 @@ static int GetAddrInfoNonLinux(const char* hostname, int port,
   address->sin_family = name->h_addrtype;
   memcpy((char *) &address->sin_addr.s_addr,
          name->h_addr_list[0], name->h_length);
-  address->sin_port = htons(port);
+  address->sin_port = htons(port);*/
   return 0;
 }
 #endif
@@ -388,7 +389,7 @@ static int GetAddrInfo(const char* hostname, int port,
 
 // Set up a connection to a ScrollView on hostname:port.
 SVNetwork::SVNetwork(const char* hostname, int port) {
-  mutex_send_ = new SVMutex();
+  /*mutex_send_ = new SVMutex();
   msg_buffer_in_ = new char[kMaxMsgSize + 1];
   msg_buffer_in_[0] = '\0';
 
@@ -444,7 +445,7 @@ SVNetwork::SVNetwork(const char* hostname, int port) {
                    addr_info->ai_protocol);
     }
   }
-  FreeAddrInfo(addr_info);
+  FreeAddrInfo(addr_info);*/
 }
 
 SVNetwork::~SVNetwork() {
